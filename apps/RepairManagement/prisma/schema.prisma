@@ -1,0 +1,48 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Repair {
+  id               Int                @id @default(autoincrement())
+  status           EnumRepairStatus
+  priority         EnumRepairPriority
+  assignedToId     Int
+  areaId           Int
+  supervisorsId    Int?
+  repairSchedule   RepairSchedule?    @relation(fields: [repairScheduleId], references: [id])
+  repairScheduleId Int?
+  createdAt        DateTime           @default(now())
+  updatedAt        DateTime           @updatedAt
+  deletedAt        DateTime?
+  complaints       Json?
+  resources        Json?
+}
+
+model RepairSchedule {
+  id          Int       @id @default(autoincrement())
+  time        DateTime
+  adminId     Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  supervisors Json?
+  report      Json?
+  repairs     Repair[]
+}
+
+enum EnumRepairStatus {
+  Pending
+  InProgress
+  Completed
+}
+
+enum EnumRepairPriority {
+  Low
+  Medium
+  High
+}
