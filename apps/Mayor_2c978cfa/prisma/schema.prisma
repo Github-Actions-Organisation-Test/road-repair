@@ -1,0 +1,32 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Mayor {
+  id        Int       @id @default(autoincrement())
+  city      String
+  userId    Int
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
+  deletedAt DateTime?
+  reports   Report[]
+}
+
+model Report {
+  id               Int       @id @default(autoincrement())
+  time             DateTime
+  repairScheduleId Int
+  createdAt        DateTime  @default(now())
+  updatedAt        DateTime  @updatedAt
+  deletedAt        DateTime?
+  complaints       Json?
+  resources        Json?
+  update           Json?
+  mayor            Mayor?    @relation(fields: [mayorId], references: [id])
+  mayorId          Int?
+}
