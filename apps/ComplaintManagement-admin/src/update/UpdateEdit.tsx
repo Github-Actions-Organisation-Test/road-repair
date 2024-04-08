@@ -1,0 +1,22 @@
+import * as React from "react";
+import {
+  Edit,
+  SimpleForm,
+  EditProps,
+  DateTimeInput,
+  NumberInput,
+} from "react-admin";
+
+export const UpdateEdit = (props: EditProps): React.ReactElement => {
+  return (
+    <Edit {...props}>
+      <SimpleForm>
+        <DateTimeInput label="Time" source="time" />
+        <NumberInput step={1} label="Report ID" source="reportId" />
+        <NumberInput step={1} label="Residents ID" source="residentsId" />
+        <DateTimeInput label="Deleted At" source="deletedAt" />
+        <div />
+      </SimpleForm>
+    </Edit>
+  );
+};
