@@ -1,0 +1,20 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model RepairSchedule {
+  id          Int       @id @default(autoincrement())
+  time        DateTime
+  adminId     Int?
+  createdAt   DateTime  @default(now())
+  updatedAt   DateTime  @updatedAt
+  deletedAt   DateTime?
+  supervisors Json?
+  repairs     Json?
+  report      Json?
+}
