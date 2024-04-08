@@ -1,0 +1,69 @@
+datasource db {
+  provider = "postgresql"
+  url      = env("DB_URL")
+}
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+model Area {
+  id          Int         @id @default(autoincrement())
+  name        String
+  address     String
+  region      String
+  country     String
+  createdAt   DateTime    @default(now())
+  updatedAt   DateTime    @updatedAt
+  deletedAt   DateTime?
+  residents   Resident[]
+  supervisors Json?
+  complaint   Complaint[]
+  repair      Json?
+}
+
+model Resident {
+  id         Int         @id @default(autoincrement())
+  userId     Int
+  createdAt  DateTime    @default(now())
+  updatedAt  DateTime    @updatedAt
+  deletedAt  DateTime?
+  complaints Complaint[]
+  updates    Json?
+  area       Area?       @relation(fields: [areaId], references: [id])
+  areaId     Int?
+
+  @@map("Residents")
+}
+
+model Complaint {
+  id           Int                   @id @default(autoincrement())
+  road         String
+  description  String
+  subscription Boolean
+  userId       Int
+  severity     EnumComplaintSeverity
+  status       EnumComplaintStatus
+  repairId     Int?
+  reportId     Int?
+  updateId     Int?
+  createdAt    DateTime              @default(now())
+  updatedAt    DateTime              @updatedAt
+  deletedAt    DateTime?
+  area         Area?                 @relation(fields: [areaId], references: [id])
+  areaId       Int?
+  residents    Resident?             @relation(fields: [residentsId], references: [id])
+  residentsId  Int?
+}
+
+enum EnumComplaintSeverity {
+  Low
+  Medium
+  High
+}
+
+enum EnumComplaintStatus {
+  Pending
+  InProgress
+  Completed
+}
